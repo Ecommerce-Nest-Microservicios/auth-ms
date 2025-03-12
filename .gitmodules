@@ -1,0 +1,3 @@
+[submodule "auth-m"]
+	path = auth-m
+	url = https://github.com/Ecommerce-Nest-Microservicios/auth-ms.git
