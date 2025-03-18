@@ -1,33 +1,40 @@
-name: Update Parent Repo
+name: Docker Build and Push
 
 on:
   push:
     branches:
       - main
+    paths:
+      - '*'
+      - '**' # Se ejecuta cuando hay cambios en cualquier archivo del submódulo
 
 jobs:
-  update-parent:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
-      # Clona el submodule (repositorio actual) en la carpeta raíz
+      # Clona el submódulo
       - name: Checkout submodule
         uses: actions/checkout@v4
-
-      # Clona el repositorio principal en la carpeta "parent-repo"
-      - name: Checkout parent repo
-        uses: actions/checkout@v4
         with:
-          repository: Ecommerce-Nest-Microservicios/ecommerce_app
-          path: parent-repo # Carpeta donde se clonará el repositorio principal
-          token: ${{ secrets.ORG_TOKEN }} # Usa un token con permisos suficientes
+          submodules: recursive
 
-      # Actualiza la referencia del submodule en el repositorio principal
-      - name: Update submodule reference in parent repo
+      # Autenticación en Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      # Construye la imagen de Docker
+      - name: Build Docker image
         run: |
-          cd parent-repo  # Cambia a la carpeta del repositorio principal
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git submodule update --init --recursive  # Actualiza los submodules
-          git add ${{ github.event.repository.name }}  # Agrega los cambios del submodule
-          git commit -m "Actualizada referencia del submodule ${{ github.event.repository.name }}"  # Haz commit de los cambios
-          git push origin main  # Sube los cambios al repositorio principal
+          docker build \
+            -t naluengas/microservicios-nestjs:${{ github.event.repository.name }} \
+            -f ${{ github.event.repository.name }}/dockerfile.prod \
+            --platform=linux/amd64 \
+            ./${{ github.event.repository.name }}
+
+      # Sube la imagen de Docker a Docker Hub
+      - name: Push Docker image
+        run: |
+          docker push naluengas/microservicios-nestjs:${{ github.event.repository.name }}
