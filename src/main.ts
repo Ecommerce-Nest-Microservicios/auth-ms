@@ -25,7 +25,7 @@ async function bootstrap() {
 
   await app.listen();
 
-  console.log('Probando el worflow ');
+  console.log('Probando el ');
 
   logger.log(`Auth Microservice running...`);
 }
