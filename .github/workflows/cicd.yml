@@ -17,7 +17,7 @@ jobs:
       - name: Checkout parent repo
         uses: actions/checkout@v4
         with:
-          repository: nombre-organizacion/repositorio-principal # Reemplaza con el nombre de la organización y el repositorio principal
+          repository: Ecommerce-Nest-Microservicios/ecommerce_app
           path: parent-repo # Carpeta donde se clonará el repositorio principal
           token: ${{ secrets.ORG_TOKEN }} # Usa un token con permisos suficientes
 
