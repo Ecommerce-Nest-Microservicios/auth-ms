@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - '*'
-      - '**' # Se ejecuta cuando hay cambios en cualquier archivo del submódulo
 
 jobs:
   build-and-push:
@@ -15,8 +12,6 @@ jobs:
       # Clona el submódulo
       - name: Checkout submodule
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       # Autenticación en Docker Hub
       - name: Log in to Docker Hub
