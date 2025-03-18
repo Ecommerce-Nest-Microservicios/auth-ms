@@ -30,9 +30,9 @@ jobs:
         run: |
           docker build \
             -t naluengas/microservicios-nestjs:${{ github.event.repository.name }} \
-            -f ${{ github.event.repository.name }}/dockerfile.prod \
+            -f dockerfile.prod \
             --platform=linux/amd64 \
-            ./${{ github.event.repository.name }}
+            .
 
       # Sube la imagen de Docker a Docker Hub
       - name: Push Docker image
