@@ -27,6 +27,9 @@ jobs:
             -t naluengas/microservicios-nestjs:${{ github.event.repository.name }} \
             -f dockerfile.prod \
             --platform=linux/amd64 \
+            --build-arg \
+              AUTH_DATABASE_URL=${{ secrets.AUTH_DATABASE_URL }} \
+              JWT_SECRET=${{ secrets.JWT_SECRET }} \
             .
 
       # Sube la imagen de Docker a Docker Hub
