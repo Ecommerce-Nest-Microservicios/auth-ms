@@ -2,12 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { RegisterUserDto } from './dto/register-auth.dto';
 import { LoginUserDto } from './dto/login-auth.dto';
 import { PrismaService } from 'src/database/prisma.service';
-import { NATS_SERVICE } from 'src/config/microservices';
-import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { RpcException } from '@nestjs/microservices';
 import { catchError, from, map, Observable, switchMap } from 'rxjs';
 import {
   IAuthData,
   IAuthServiceResponse,
+  IVerifyPayload,
   JWTPayload,
 } from './interfaces/auth.interface';
 import { hashSync, compareSync, genSaltSync } from 'bcryptjs';
@@ -20,7 +20,6 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-    @Inject(NATS_SERVICE) private readonly client: ClientProxy,
     @Inject(config.KEY)
     private readonly configService: ConfigType<typeof config>,
   ) {}
@@ -165,7 +164,7 @@ export class AuthService {
     );
   }
 
-  verifyToken(payload: IAuthData) {
+  verifyToken(payload: IVerifyPayload): Observable<IAuthData> {
     return from(
       this.jwtService.verifyAsync(payload.token, {
         secret: this.configService.JWT_SECRET,

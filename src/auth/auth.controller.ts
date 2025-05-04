@@ -3,7 +3,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-auth.dto';
 import { LoginUserDto } from './dto/login-auth.dto';
-import { IAuthData } from './interfaces/auth.interface';
+import { IAuthData, IVerifyPayload } from './interfaces/auth.interface';
 
 @Controller()
 export class AuthController {
@@ -20,7 +20,7 @@ export class AuthController {
   }
 
   @MessagePattern('verifyUserAuth')
-  verifyToken(@Payload() payload: IAuthData) {
+  verifyToken(@Payload() payload: IVerifyPayload) {
     return this.authService.verifyToken(payload);
   }
 }

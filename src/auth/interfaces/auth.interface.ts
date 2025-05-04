@@ -3,7 +3,9 @@ export interface IAuth {
   name: string;
   email: string;
 }
-
+export interface IVerifyPayload {
+  token: string;
+}
 export interface IAuthData {
   user: IAuth;
   token: string;
