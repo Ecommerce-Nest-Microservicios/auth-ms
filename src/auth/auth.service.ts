@@ -1,21 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RegisterUserDto } from './dto/register-auth.dto';
 import { LoginUserDto } from './dto/login-auth.dto';
-import { VerifyUserDto } from './dto/verify-auth.dto';
 import { PrismaService } from 'src/database/prisma.service';
 import { NATS_SERVICE } from 'src/config/microservices';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import {
-  catchError,
-  firstValueFrom,
-  from,
-  lastValueFrom,
-  map,
-  Observable,
-  of,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { catchError, from, map, Observable, switchMap } from 'rxjs';
 import {
   IAuthData,
   IAuthServiceResponse,
